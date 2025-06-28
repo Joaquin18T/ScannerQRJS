@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+  <script src="assets/plugins/qrCode.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
+  <input type="text" id="valor" hidden>
+  <div class="row justify-content-center mt-5">
+    <div class="col-sm-4 shadow p-3">
+      <h5 class="text-center">Escanear codigo QR</h5>
+      <div class="row text-center">
+        <a id="btn-scan-qr" href="#">
+          <img src="https://dab1nmslvvntp.cloudfront.net/wp-content/uploads/2017/07/1499401426qr_icon.svg" class="img-fluid text-center" width="175">
+        <a/>
+        <canvas hidden="" id="qr-canvas" class="img-fluid"></canvas>
+        </div>
+        <div class="row mx-5 my-3">
+        <button class="btn btn-success btn-sm rounded-3 mb-2" onclick="encenderCamara()">Encender camara</button>
+        <button class="btn btn-danger btn-sm rounded-3" onclick="cerrarCamara()" id="boton">Detener camara</button>
+      </div>
+    </div>
+  </div>
+  <div class="container">
+    <div class="card mt-2">
+      <div class="card-body">
+        <div id="idvalor" class="text-center h2"></div>
+        <div class="input-group mb-3">
+          <span class="input-group-text" id="basic-addon1">Superhero Name</span>
+          <input type="text" class="form-control" id="supername">
+        </div>
+        <div class="input-group mb-3">
+          <span class="input-group-text" id="basic-addon1">Full Name</span>
+          <input type="text" class="form-control" id="fullname">
+        </div>        
+        <div class="input-group mb-3">
+          <span class="input-group-text" id="basic-addon1">Gender</span>
+          <input type="text" class="form-control" id="gender">
+        </div>
+        <div class="input-group mb-3">
+          <span class="input-group-text" id="basic-addon1">Race</span>
+          <input type="text" class="form-control" id="race">
+        </div>
+        <div class="input-group mb-3">
+          <span class="input-group-text" id="basic-addon1">Publisher</span>
+          <input type="text" class="form-control" id="publisher">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <audio id="audioScaner" src="assets/sonido.mp3"></audio>
+  <script src="assets/js/index.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded",()=>{
+      let valor = document.querySelector("#valor");
+      const audio = document.getElementById("audioScaner");
+
+      const id = document.getElementById("idvalor");
+      const supername = selector("supername");
+      const fullname = selector("fullname");
+      const gender = selector("gender");
+      const race = selector("race");
+      const publisher = selector("publisher");
+
+      audio.addEventListener("play",()=>{
+        console.log("se reproducio");
+        console.log(valor.value);
+        fetch(`../controllers/publisher.controller.php?operacion=getById&id=${valor.value}`)
+        .then(response=>response.json())
+        .then(data=>{
+          console.log(data);
+          id.innerText = valor.value;
+          supername.value = data[0].superhero_name;
+          fullname.value =data[0].full_name;
+          gender.value = data[0].gender;
+          race.value = data[0].race;
+          publisher.value = data[0].publisher_name;
+        })
+      })
+
+      function selector(valor){
+        return document.querySelector(`#${valor}`);
+      }
+
+
+    })
+  </script>
+</body>
+</html>
